@@ -421,3 +421,129 @@
 2026-06-17 13:35:03,308 - [PID 42156] - INFO - Capture-to-DIO latency: 76.3s
 2026-06-17 13:35:03,808 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
 2026-06-17 13:35:08,811 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:08,678 - [PID 47160] - INFO - Connecting to localhost:1883 as mqtt-client-07d94b06
+2026-06-17 13:53:08,708 - [PID 47160] - INFO - Connected to localhost:1883
+2026-06-17 13:53:08,709 - [PID 47160] - INFO - Connecting to localhost:1883 as mqtt-client-cd8bb897
+2026-06-17 13:53:08,710 - [PID 47160] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 13:53:08,710 - [PID 47160] - INFO - Digital I/O controller initialized successfully
+2026-06-17 13:53:08,724 - [PID 47160] - INFO - Connected to localhost:1883
+2026-06-17 13:53:08,724 - [PID 47160] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)
+2026-06-17 13:53:12,470 - [PID 42156] - INFO - Capture-to-DIO latency: 0.5s
+2026-06-17 13:53:12,477 - [PID 47160] - INFO - Capture-to-DIO latency: 0.5s
+2026-06-17 13:53:12,481 - [PID 47160] - INFO - Capture-to-DIO latency: 0.5s
+2026-06-17 13:53:12,487 - [PID 47160] - INFO - Capture-to-DIO latency: 0.5s
+2026-06-17 13:53:17,471 - [PID 42156] - INFO - Capture-to-DIO latency: 5.5s
+2026-06-17 13:53:17,504 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:17,506 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:17,507 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:17,972 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:18,783 - [PID 47160] - INFO - Capture-to-DIO latency: 0.8s
+2026-06-17 13:53:18,796 - [PID 47160] - INFO - Capture-to-DIO latency: 0.8s
+2026-06-17 13:53:18,827 - [PID 47160] - INFO - Capture-to-DIO latency: 0.8s
+2026-06-17 13:53:22,473 - [PID 42156] - INFO - Capture-to-DIO latency: 10.5s
+2026-06-17 13:53:22,973 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:23,514 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:23,519 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:23,532 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:25,195 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:25,198 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:25,199 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:27,475 - [PID 42156] - INFO - Capture-to-DIO latency: 9.5s
+2026-06-17 13:53:27,975 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:30,502 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:30,504 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:30,503 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:31,393 - [PID 47160] - INFO - Capture-to-DIO latency: 0.4s
+2026-06-17 13:53:31,398 - [PID 47160] - INFO - Capture-to-DIO latency: 0.4s
+2026-06-17 13:53:31,402 - [PID 47160] - INFO - Capture-to-DIO latency: 0.4s
+2026-06-17 13:53:32,477 - [PID 42156] - INFO - Capture-to-DIO latency: 14.5s
+2026-06-17 13:53:32,977 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:33,181 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:33,183 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:33,185 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:33,656 - [PID 47160] - INFO - Capture-to-DIO latency: 0.7s
+2026-06-17 13:53:33,658 - [PID 47160] - INFO - Capture-to-DIO latency: 0.7s
+2026-06-17 13:53:33,659 - [PID 47160] - INFO - Capture-to-DIO latency: 0.7s
+2026-06-17 13:53:34,241 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:34,244 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:34,246 - [PID 47160] - INFO - Capture-to-DIO latency: 0.2s
+2026-06-17 13:53:36,505 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:36,506 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:36,510 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:37,478 - [PID 42156] - INFO - Capture-to-DIO latency: 19.5s
+2026-06-17 13:53:37,978 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:38,502 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:38,503 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:38,503 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:38,503 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:38,503 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:38,513 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:39,503 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:39,504 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:39,507 - [PID 47160] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:42,480 - [PID 42156] - INFO - Capture-to-DIO latency: 17.5s
+2026-06-17 13:53:42,980 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:47,482 - [PID 42156] - INFO - Capture-to-DIO latency: 22.5s
+2026-06-17 13:53:47,982 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:52,483 - [PID 42156] - INFO - Capture-to-DIO latency: 27.5s
+2026-06-17 13:53:52,983 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:53:57,486 - [PID 42156] - INFO - Capture-to-DIO latency: 26.5s
+2026-06-17 13:53:57,985 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:02,487 - [PID 42156] - INFO - Capture-to-DIO latency: 31.5s
+2026-06-17 13:54:02,988 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:07,489 - [PID 42156] - INFO - Capture-to-DIO latency: 36.5s
+2026-06-17 13:54:07,989 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:12,491 - [PID 42156] - INFO - Capture-to-DIO latency: 39.5s
+2026-06-17 13:54:12,991 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:17,492 - [PID 42156] - INFO - Capture-to-DIO latency: 44.5s
+2026-06-17 13:54:17,992 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:22,493 - [PID 42156] - INFO - Capture-to-DIO latency: 49.5s
+2026-06-17 13:54:22,994 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:27,495 - [PID 42156] - INFO - Capture-to-DIO latency: 54.5s
+2026-06-17 13:54:27,995 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:32,497 - [PID 42156] - INFO - Capture-to-DIO latency: 59.5s
+2026-06-17 13:54:32,997 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:37,499 - [PID 42156] - INFO - Capture-to-DIO latency: 64.5s
+2026-06-17 13:54:37,999 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:42,501 - [PID 42156] - INFO - Capture-to-DIO latency: 68.5s
+2026-06-17 13:54:43,001 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:47,503 - [PID 42156] - INFO - Capture-to-DIO latency: 73.5s
+2026-06-17 13:54:48,002 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:52,300 - [PID 13544] - INFO - Connecting to localhost:1883 as mqtt-client-c35e801d
+2026-06-17 13:54:52,325 - [PID 13544] - INFO - Connected to localhost:1883
+2026-06-17 13:54:52,326 - [PID 13544] - INFO - Connecting to localhost:1883 as mqtt-client-07d2541d
+2026-06-17 13:54:52,327 - [PID 13544] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 13:54:52,327 - [PID 13544] - INFO - Digital I/O controller initialized successfully
+2026-06-17 13:54:52,348 - [PID 13544] - INFO - Connected to localhost:1883
+2026-06-17 13:54:52,348 - [PID 13544] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)
+2026-06-17 13:54:52,504 - [PID 42156] - INFO - Capture-to-DIO latency: 78.5s
+2026-06-17 13:54:53,004 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:54:58,005 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:09,306 - [PID 42156] - INFO - Capture-to-DIO latency: 0.3s
+2026-06-17 13:55:09,315 - [PID 13544] - INFO - Capture-to-DIO latency: 0.3s
+2026-06-17 13:55:09,321 - [PID 13544] - INFO - Capture-to-DIO latency: 0.3s
+2026-06-17 13:55:09,326 - [PID 13544] - INFO - Capture-to-DIO latency: 0.3s
+2026-06-17 13:55:09,334 - [PID 13544] - INFO - Capture-to-DIO latency: 0.3s
+2026-06-17 13:55:14,309 - [PID 42156] - INFO - Capture-to-DIO latency: 5.3s
+2026-06-17 13:55:14,507 - [PID 13544] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:14,507 - [PID 13544] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:14,507 - [PID 13544] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:14,508 - [PID 13544] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:14,809 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:15,568 - [PID 13544] - INFO - Capture-to-DIO latency: 0.6s
+2026-06-17 13:55:15,571 - [PID 13544] - INFO - Capture-to-DIO latency: 0.6s
+2026-06-17 13:55:15,573 - [PID 13544] - INFO - Capture-to-DIO latency: 0.6s
+2026-06-17 13:55:19,311 - [PID 42156] - INFO - Capture-to-DIO latency: 10.3s
+2026-06-17 13:55:19,811 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:20,502 - [PID 13544] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:20,504 - [PID 13544] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:20,511 - [PID 13544] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:24,313 - [PID 42156] - INFO - Capture-to-DIO latency: 15.3s
+2026-06-17 13:55:24,813 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:29,315 - [PID 42156] - INFO - Capture-to-DIO latency: 14.3s
+2026-06-17 13:55:29,815 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:34,317 - [PID 42156] - INFO - Capture-to-DIO latency: 19.3s
+2026-06-17 13:55:34,817 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:39,318 - [PID 42156] - INFO - Capture-to-DIO latency: 24.3s
+2026-06-17 13:55:39,818 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 13:55:44,821 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.

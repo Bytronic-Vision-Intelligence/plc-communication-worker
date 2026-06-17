@@ -67,15 +67,16 @@ def subscribe_listener(ip: str, port: int, trigger_topic: str, result_queue: Que
     client.subscribe(trigger_topic, on_message)
     stop_event.wait()
 
-def reset_io_after_delay(dio_controller: VecowIO, delay: int):
-    # This function will reset all digital IO to 0.
-    # this will be better as a loop to make it more expanisve
+def reset_io_after_delay(dio_controller: VecowIO, delay: int, dio_values: list):
+    # Only resets pins that were activated, so concurrent detections don't
+    # clobber each other's outputs.
     time.sleep(delay)
     for i in range(DIO_COUNT):
-        if i < DIO_BLOCK_SIZE:
-            dio_controller.set_do_pin(1, i, 0)
-        else:
-            dio_controller.set_do_pin(2, i - DIO_BLOCK_SIZE, 0)
+        if dio_values[i]:
+            if i < DIO_BLOCK_SIZE:
+                dio_controller.set_do_pin(1, i, 0)
+            else:
+                dio_controller.set_do_pin(2, i - DIO_BLOCK_SIZE, 0)
     logging.info(f"Digital IO reset to 0 after delay of. {delay} seconds.")
     return
 
@@ -143,7 +144,7 @@ def set_digital_io(dio_values: list, dio_controller: VecowIO, delay:int = 0):
 
     threading.Thread(
         target=reset_io_after_delay,
-        args=(dio_controller, DIO_RESET_DELAY),
+        args=(dio_controller, DIO_RESET_DELAY, dio_values),
         daemon=True,
     ).start()
 
@@ -191,20 +192,23 @@ def main():
                 detections = [{"pins": decode_dio_values(msg), "capture_time": None}]
 
             for detection in detections:
+                pins = detection.get("pins")
+                if pins is None:
+                    logging.warning("Detection missing 'pins' key; skipping.")
+                    continue
+
                 capture_time = detection.get("capture_time")
+                delta_time = 0.0
                 if capture_time:
                     delta_time = calculate_deltatime(capture_time)
                     logging.info(f"Capture-to-DIO latency: {delta_time:.1f}s")
 
                 raw_io_delay = set_io_delay()
-                print(
-                    f"raw delay: {raw_io_delay}, processing delay: {delta_time}, adjustaed delay: {raw_io_delay - delta_time}"
-                )
-                delay = raw_io_delay
+                adjusted_delay = max(0.0, raw_io_delay - delta_time)
 
                 threading.Thread(
                     target=set_digital_io,
-                    args=([int(p) for p in detection["pins"]], dio_controller, delay),
+                    args=([int(p) for p in pins], dio_controller, adjusted_delay),
                     daemon=True,
                 ).start()
                 

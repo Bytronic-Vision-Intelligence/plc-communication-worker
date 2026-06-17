@@ -20,6 +20,7 @@ from ctypes import *
 import time
 import os
 import logging
+import threading
 from filelock import FileLock
 
 logging.basicConfig(
@@ -32,6 +33,7 @@ logging.basicConfig(
 
 class VecowIO:
     def __init__(self):
+        self._lock = threading.Lock()
         # Load the DLLs
         try:
             drv_path = "./drv.dll"
@@ -308,22 +310,22 @@ class VecowIO:
         if not self.other_dll or not self.initialized_io:
             return False
         try:
-            if bank == 1:
-                current_value, current_value2 = self.get_di1()
-            elif bank == 2:
-                current_value, current_value2 = self.get_di2()
-            else:
-                raise ValueError(f"bank must be either 1 or 2 got {bank}")
-            current_value_bin = [int(bit) for bit in bin(current_value)[2:].zfill(8)][::-1] # Reverse for LSB first
-            current_value_bin[pin] = value
-            new_value = int("".join(map(str, current_value_bin[::-1])), 2) # Reverse back for int conversion
-            if bank == 1:
-                self.set_do1(new_value)
-            elif bank == 2:
-                self.set_do2(new_value)
-            else:
-                raise ValueError(f"bank must be either 1 or 2 got {bank}")
-
+            with self._lock:
+                if bank == 1:
+                    current_value, current_value2 = self.get_di1()
+                elif bank == 2:
+                    current_value, current_value2 = self.get_di2()
+                else:
+                    raise ValueError(f"bank must be either 1 or 2 got {bank}")
+                current_value_bin = [int(bit) for bit in bin(current_value)[2:].zfill(8)][::-1] # Reverse for LSB first
+                current_value_bin[pin] = value
+                new_value = int("".join(map(str, current_value_bin[::-1])), 2) # Reverse back for int conversion
+                if bank == 1:
+                    self.set_do1(new_value)
+                elif bank == 2:
+                    self.set_do2(new_value)
+                else:
+                    raise ValueError(f"bank must be either 1 or 2 got {bank}")
             return True
         except Exception as e:
             logging.info(f"Failed to set DO independent: {e}")
@@ -335,22 +337,23 @@ class VecowIO:
             return False
 
         try:
-            if bank == 1:
-                current_value, current_value2 = self.get_di1()
-            elif bank == 2:
-                current_value, current_value2 = self.get_di2()
-            else:
-                raise ValueError(f"bank must be 1 or 2 got {bank}")
-            current_value_bin = [int(bit) for bit in bin(current_value)[2:].zfill(8)][::-1] # Reverse for LSB first
-            for pin in pins:
-                current_value_bin[pin] = value
-            new_value = int("".join(map(str, current_value_bin[::-1])), 2) # Reverse back for int conversion
-            if bank == 1:
-                self.set_do1(new_value)
-            elif bank == 2:
-                self.set_do2(new_value)
-            else:
-                raise ValueError(f"bank must be 1 or 2 got {bank}")
+            with self._lock:
+                if bank == 1:
+                    current_value, current_value2 = self.get_di1()
+                elif bank == 2:
+                    current_value, current_value2 = self.get_di2()
+                else:
+                    raise ValueError(f"bank must be 1 or 2 got {bank}")
+                current_value_bin = [int(bit) for bit in bin(current_value)[2:].zfill(8)][::-1] # Reverse for LSB first
+                for pin in pins:
+                    current_value_bin[pin] = value
+                new_value = int("".join(map(str, current_value_bin[::-1])), 2) # Reverse back for int conversion
+                if bank == 1:
+                    self.set_do1(new_value)
+                elif bank == 2:
+                    self.set_do2(new_value)
+                else:
+                    raise ValueError(f"bank must be 1 or 2 got {bank}")
             return True
         except Exception as e:
             logging.info(f"Failed to set DO independent: {e}")
