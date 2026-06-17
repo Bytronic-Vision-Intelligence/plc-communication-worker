@@ -1,0 +1,42 @@
+2026-06-17 09:30:59,191 - [PID 22900] - INFO - Connecting to localhost:1883 as mqtt-client-44438a07
+2026-06-17 09:30:59,225 - [PID 22900] - INFO - Connected to localhost:1883
+2026-06-17 09:30:59,226 - [PID 22900] - INFO - Connecting to localhost:1883 as mqtt-client-c4e25a60
+2026-06-17 09:30:59,226 - [PID 22900] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 09:30:59,226 - [PID 22900] - INFO - Digital I/O controller initialized successfully
+2026-06-17 09:30:59,237 - [PID 22900] - INFO - Connected to localhost:1883
+2026-06-17 09:30:59,239 - [PID 22900] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)
+2026-06-17 09:34:37,534 - [PID 47132] - INFO - Connecting to localhost:1883 as mqtt-client-f12ac5e8
+2026-06-17 09:34:37,577 - [PID 47132] - INFO - Connected to localhost:1883
+2026-06-17 09:34:37,578 - [PID 47132] - INFO - Connecting to localhost:1883 as mqtt-client-817e5be4
+2026-06-17 09:34:37,579 - [PID 47132] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 09:34:37,579 - [PID 47132] - INFO - Digital I/O controller initialized successfully
+2026-06-17 09:34:37,599 - [PID 47132] - INFO - Connected to localhost:1883
+2026-06-17 09:34:37,600 - [PID 47132] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)
+2026-06-17 09:36:24,029 - [PID 41888] - INFO - Connecting to localhost:1883 as mqtt-client-e304bc33
+2026-06-17 09:36:24,055 - [PID 41888] - INFO - Connected to localhost:1883
+2026-06-17 09:36:24,056 - [PID 41888] - INFO - Connecting to localhost:1883 as mqtt-client-88f3cd9f
+2026-06-17 09:36:24,056 - [PID 41888] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 09:36:24,057 - [PID 41888] - INFO - Digital I/O controller initialized successfully
+2026-06-17 09:36:24,075 - [PID 41888] - INFO - Connected to localhost:1883
+2026-06-17 09:36:24,076 - [PID 41888] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)
+2026-06-17 09:38:37,270 - [PID 49468] - INFO - Connecting to localhost:1883 as mqtt-client-96b1a422
+2026-06-17 09:38:37,295 - [PID 49468] - INFO - Connected to localhost:1883
+2026-06-17 09:38:37,296 - [PID 49468] - INFO - Connecting to localhost:1883 as mqtt-client-2f08260f
+2026-06-17 09:38:37,297 - [PID 49468] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 09:38:37,297 - [PID 49468] - INFO - Digital I/O controller initialized successfully
+2026-06-17 09:38:37,306 - [PID 49468] - INFO - Connected to localhost:1883
+2026-06-17 09:38:37,306 - [PID 49468] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)
+2026-06-17 09:41:43,254 - [PID 3620] - INFO - Connecting to localhost:1883 as mqtt-client-88147419
+2026-06-17 09:41:43,288 - [PID 3620] - INFO - Connected to localhost:1883
+2026-06-17 09:41:43,289 - [PID 3620] - INFO - Connecting to localhost:1883 as mqtt-client-f2d344e2
+2026-06-17 09:41:43,290 - [PID 3620] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 09:41:43,291 - [PID 3620] - INFO - Digital I/O controller initialized successfully
+2026-06-17 09:41:43,314 - [PID 3620] - INFO - Connected to localhost:1883
+2026-06-17 09:41:43,315 - [PID 3620] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)
+2026-06-17 09:42:55,254 - [PID 43244] - INFO - Connecting to localhost:1883 as mqtt-client-581f4971
+2026-06-17 09:42:55,293 - [PID 43244] - INFO - Connected to localhost:1883
+2026-06-17 09:42:55,294 - [PID 43244] - INFO - Connecting to localhost:1883 as mqtt-client-38261b4d
+2026-06-17 09:42:55,295 - [PID 43244] - INFO - Failed to load DLLs: Could not find module 'C:\Users\AmyHarrison\plc_worker\plc-communication-worker\drv.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+2026-06-17 09:42:55,295 - [PID 43244] - INFO - Digital I/O controller initialized successfully
+2026-06-17 09:42:55,304 - [PID 43244] - INFO - Connected to localhost:1883
+2026-06-17 09:42:55,305 - [PID 43244] - INFO - Subscribed to 'magnapower/sortyboi/inference/dio_array' (QoS 0)

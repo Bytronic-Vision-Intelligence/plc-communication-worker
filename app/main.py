@@ -1,12 +1,12 @@
-from typing import Optional
-
-from MQTT_Objects.Classes.mqttClass import mqttClass
+from mqtt_client import MQTTClient, MQTTConfig
 from Dependencies import loadConfig
 import time
-import asyncio
+from queue import Empty, Queue
 import threading
 from Dependencies.dio_controller import VecowIO
 import logging
+from sys import getsizeof
+import json
 
 #this is a bit gross make it better in future by creating a config class that can be imported and used to get the values 
 # instead of having them as global variables. This will also make it easier to test and mock the config values in future.
@@ -31,10 +31,6 @@ logging.basicConfig(
     filemode='a'  # Append mode instead of overwrite
 )
 
-def start_async_loop(loop):
-    asyncio.set_event_loop(loop)
-    loop.run_forever()
-
 def setup_dio_control():
     try:
         dio = VecowIO()
@@ -42,29 +38,34 @@ def setup_dio_control():
         return dio
     except Exception as e:
         raise Exception(f"Failed to initialize Digital I/O controller: {e}")
-
-async def listen_for_data(data: mqttClass) -> Optional[str]:
-    try:
-        msg = await data.ListenForMessage()
-
-    except Exception as e:
-        raise Exception(f"Error occurred while listening for message: {e}")
-    if msg is None:
-        logging.warning("Received None message from MQTT. Skipping processing.")
-        return None
     
-    msg_decoded = msg.decode('utf-8') if isinstance(msg, bytes) else str(msg)
+def start_subscribe_thread(ip: str, port: int, topic: str, queue: Queue, stop_event: threading.Event) -> threading.Thread:
+    thread = threading.Thread(
+        target=subscribe_listener,
+        args=(ip, port, topic, queue, stop_event),
+        daemon=True,
+    )
+    thread.start()
+    return thread
 
-    if msg_decoded is not None:
-        logging.info("data received for plc." + str(msg_decoded))
-        return msg_decoded
+def subscribe_listener(ip: str, port: int, trigger_topic: str, result_queue: Queue, stop_event: threading.Event):
+    config = MQTTConfig(host=IP, port=PORT)
+    client = MQTTClient(config)
+    client.connect()
+    print("client connected")
 
-    return None
+    def on_message(topic: str, payload: str) -> None:
+        # Handler signature used by mqtt_client.MQTTClient.subscribe
+        if isinstance(payload, (bytes, bytearray)):
+            payload = payload.decode('utf-8')
+        result_queue.put(payload)
 
-async def reset_io_after_delay(dio_controller: VecowIO, delay: int):
+    client.subscribe(trigger_topic, on_message)
+
+def reset_io_after_delay(dio_controller: VecowIO, delay: int):
     # This function will reset all digital IO to 0.
     # this will be better as a loop to make it more expanisve
-    await asyncio.sleep(delay)
+    time.sleep(delay)
     for i in range(DIO_COUNT):
         if i < DIO_COUNT/DIO_BANKS:
             dio_controller.set_do_pin(1, i, 0)
@@ -73,16 +74,63 @@ async def reset_io_after_delay(dio_controller: VecowIO, delay: int):
     logging.info(f"Digital IO reset to 0 after delay of. {delay} seconds.")
     return
 
-def decode_dio_values(values: str):
-    '''This function will decode the digital IO values received from the PLC and return a list of integers representing the state of each IO.'''
-    data = values.split(",")
-    for i in range(len(data)):
-        data[i] = int(data[i])
-    return data
+def decode_dio_values(values):
+    '''Decode the digital IO values received from the PLC.
 
-def set_digital_io(dio_values: list, dio_controller: VecowIO):
+    Supports a comma-separated string of integers like "1,0,1,1".
+    Also supports a JSON-encoded payload such as a list of detection dicts:
+        [{"pins": [...], "y_location": ...}, ...]
+    '''
+    if isinstance(values, (bytes, bytearray)):
+        values = values.decode('utf-8')
+
+    if not isinstance(values, str):
+        values = str(values)
+
+    values = values.strip()
+
+    if not values:
+        raise ValueError("Digital IO values payload is empty")
+
+    if values[0] in '[{':
+        try:
+            payload = json.loads(values)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Unable to decode JSON payload: {values}") from exc
+
+        if isinstance(payload, list):
+            if not payload:
+                return []
+            first = payload[0]
+            if isinstance(first, dict) and "pins" in first:
+                return [int(item) for item in first["pins"]]
+            return [int(item) for item in payload]
+
+        if isinstance(payload, dict):
+            if "pins" in payload:
+                return [int(item) for item in payload["pins"]]
+            raise ValueError("JSON payload dict did not contain 'pins'")
+
+        raise ValueError("JSON payload did not contain a valid list of digital IO values")
+
+    parts = [part.strip() for part in values.split(",") if part.strip()]
+    try:
+        return [int(part) for part in parts]
+    except ValueError as exc:
+        raise ValueError(f"Invalid integer in digital IO values: {values}") from exc
+
+
+async def listen_for_data(mqtt_client):
+    payload = await mqtt_client.ListenForMessage()
+    if isinstance(payload, (bytes, bytearray)):
+        return payload.decode('utf-8')
+    return str(payload)
+
+
+def set_digital_io(dio_values: list, dio_controller: VecowIO, delay:int = 0):
     # This function will set the digital IO on the PLC to trigger the capture of the image.
     # it returns nothing.
+    time.sleep(delay)
     if len(dio_values) != DIO_COUNT:
         raise ValueError(f"Error: Expected {DIO_COUNT} digital IO values, but received {len(dio_values)}.")     
         
@@ -96,27 +144,47 @@ def set_digital_io(dio_values: list, dio_controller: VecowIO):
     pass
 
 def main():
-    data = mqttClass()
-    data.ConnectToServer(IP, PORT)
-    data.SubscribeToTopic(POSITION_TOPIC)
+    config = MQTTConfig(host=IP, port=PORT)
+    client = MQTTClient(config)
+    client.connect()
 
-    loop = asyncio.new_event_loop()
-    t = threading.Thread(target=start_async_loop, args=(loop,), daemon=True)
-    t.start()
-
-    time.sleep(0.1)
+    event_queue = Queue()
+    stop_event = threading.Event()
+    subscribe_thread = start_subscribe_thread(IP, PORT, POSITION_TOPIC, event_queue, stop_event)
 
     dio_controller = setup_dio_control()
+    try:
+        while True:
+            time.sleep(0.1)
 
-    while True:
-        time.sleep(0)
-        msg = asyncio.run_coroutine_threadsafe(listen_for_data(data), loop).result()
-        if msg is not None:
-            set_digital_io(decode_dio_values(msg), dio_controller)
-            completed = f"dio updated at{time.strftime('%Y-%m-%d %H:%M:%S')}"
-            data_bytes = completed.encode('utf-8') if isinstance(completed, str) else completed
-            data.PublishMessage(PUBLISH_TOPIC, data_bytes)
-            asyncio.run_coroutine_threadsafe(reset_io_after_delay(dio_controller, DIO_RESET_DELAY), loop)
+            try:
+                msg = event_queue.get_nowait()
+                timestamp = 0
+                #msg,timestamp = event_queue.get_nowait()
+            except Empty:
+                continue
 
+            if msg is None:
+                logging.info("Received invalid trigger payload; ignoring.")
+                continue
+
+            if msg is not None:
+                set_digital_io(decode_dio_values(msg), dio_controller)
+                start_time = int(timestamp)
+                #end_time = int(time.strftime('%Y-%m-%d %H:%M:%S'))
+                #delta_time = end_time-start_time
+                #print(delta_time)
+
+                completed = f"dio updated at{time.strftime('%Y-%m-%d %H:%M:%S')}"
+                data_bytes = completed.encode('utf-8') 
+                client.publish(PUBLISH_TOPIC, data_bytes)
+
+    except KeyboardInterrupt:
+        logging.info("Shutting down subscribe listener and exiting.")
+
+    finally:
+        stop_event.set()
+        if subscribe_thread.is_alive():
+            subscribe_thread.join(timeout=2)
 if __name__ == "__main__":
     main()
