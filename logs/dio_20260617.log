@@ -547,3 +547,25 @@
 2026-06-17 13:55:39,318 - [PID 42156] - INFO - Capture-to-DIO latency: 24.3s
 2026-06-17 13:55:39,818 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
 2026-06-17 13:55:44,821 - [PID 42156] - INFO - Digital IO reset to 0 after delay of. 0.5 seconds.
+2026-06-17 14:15:54,504 - [PID 37484] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:15:54,561 - [PID 37484] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:15:54,565 - [PID 37484] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:15:54,566 - [PID 37484] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:15:54,617 - [PID 37484] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:15:54,619 - [PID 37484] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:15:54,620 - [PID 37484] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:15:54,622 - [PID 37484] - INFO - Digital IO reset to 0 after delay of. 3 seconds.
+2026-06-17 14:15:54,624 - [PID 37484] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:15:54,625 - [PID 37484] - INFO - Digital I/O controller initialized successfully
+2026-06-17 14:17:27,451 - [PID 15912] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:17:27,501 - [PID 15912] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:17:27,506 - [PID 15912] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:17:27,508 - [PID 15912] - INFO - Failed to set DO independent: 'VecowIO' object has no attribute '_lock'
+2026-06-17 14:17:49,678 - [PID 9824] - INFO - Failed to set DO independent: bank must be either 1 or 2 got 3
+2026-06-17 14:18:06,132 - [PID 2844] - INFO - Failed to set DO independent: bank must be either 1 or 2 got 3
+2026-06-17 14:18:06,174 - [PID 2844] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:18:06,176 - [PID 2844] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:18:06,177 - [PID 2844] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:18:06,178 - [PID 2844] - INFO - Digital IO reset to 0 after delay of. 3 seconds.
+2026-06-17 14:18:06,179 - [PID 2844] - INFO - Digital IO reset to 0 after delay of. 0 seconds.
+2026-06-17 14:18:06,181 - [PID 2844] - INFO - Digital I/O controller initialized successfully

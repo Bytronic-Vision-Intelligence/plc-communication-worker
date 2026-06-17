@@ -1,5 +1,6 @@
 import pathlib
 import sys
+import threading
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 
@@ -18,6 +19,7 @@ def make_dummy_vecowio(di1_value=0, di2_value=0):
     instance = VecowIO.__new__(VecowIO)
     instance.other_dll = True
     instance.initialized_io = True
+    instance._lock = threading.Lock()
 
     def get_di1():
         return di1_value, 0
