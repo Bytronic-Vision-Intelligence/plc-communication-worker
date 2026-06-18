@@ -18,7 +18,6 @@
 import ctypes
 from ctypes import *
 import time
-import os
 import logging
 import threading
 from filelock import FileLock
