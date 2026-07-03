@@ -125,7 +125,7 @@ def decode_dio_values(values):
     except ValueError as exc:
         raise ValueError(f"Invalid integer in digital IO values: {values}") from exc
 
-def set_digital_io(dio_values: list, dio_controller: VecowIO, delay:int = 0):
+def set_digital_io(dio_values: list, dio_controller: VecowIO, delay: float = 0):
     # This function will set the digital IO on the PLC to trigger the capture of the image.
     # it returns nothing.
     if delay < 0:
@@ -149,17 +149,9 @@ def set_digital_io(dio_values: list, dio_controller: VecowIO, delay:int = 0):
     ).start()
 
 def calculate_deltatime(starttime: str) -> float:
-    start = datetime.strptime(starttime, '%Y-%m-%d %H:%M:%S')
+    start = datetime.strptime(starttime, '%Y-%m-%d %H:%M:%S.%f')
     return (datetime.now() - start).total_seconds()
 
-def set_io_delay(conveyer_speed:float=1, distance_to_end:float=5):
-    """ calculates the delay based on the length of the conveyer in m
-    and the speed of the conveyer in s
-    returns the delay in seconds
-    """
-    
-    delay = distance_to_end/conveyer_speed
-    return delay
 
 def main():
     config = MQTTConfig(host=IP, port=PORT)
@@ -203,8 +195,8 @@ def main():
                     delta_time = calculate_deltatime(capture_time)
                     logging.info(f"Capture-to-DIO latency: {delta_time:.1f}s")
 
-                raw_io_delay = set_io_delay()
-                adjusted_delay = max(0.0, raw_io_delay - delta_time)
+                travel_delay = float(detection.get("travel_delay", 0.0))
+                adjusted_delay = max(0.0, travel_delay - delta_time)
 
                 threading.Thread(
                     target=set_digital_io,

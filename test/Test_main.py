@@ -136,17 +136,17 @@ class TestSetDigitalIo:
 
 class TestCalculateDeltaTime:
     def test_past_time_returns_positive_float(self):
-        five_sec_ago = (datetime.now() - timedelta(seconds=5)).strftime('%Y-%m-%d %H:%M:%S')
+        five_sec_ago = (datetime.now() - timedelta(seconds=5)).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
         result = main.calculate_deltatime(five_sec_ago)
         assert result >= 4.9
 
     def test_current_time_returns_near_zero(self):
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
         result = main.calculate_deltatime(now)
         assert 0 <= result < 1.5
 
     def test_returns_float(self):
-        ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
         assert isinstance(main.calculate_deltatime(ts), float)
 
 
