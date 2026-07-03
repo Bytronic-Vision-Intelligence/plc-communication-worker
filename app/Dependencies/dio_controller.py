@@ -23,6 +23,7 @@ import logging
 import threading
 from filelock import FileLock
 
+os.makedirs('./logs', exist_ok=True)
 logging.basicConfig(
     filename=f'./logs/dio_{time.strftime("%Y%m%d")}.log',
     level=logging.INFO,
@@ -74,13 +75,13 @@ class VecowIO:
         try:
             # # Initialize SIO
             result = self.other_dll.initial_SIO(c_ubyte(1), c_ubyte(0))
-            logging.info("result initial_SIO: ", result)
+            logging.info(f"result initial_SIO: {result}")
 
             # # Configure I/O
             for i in range(10):
                 result1, result2 = self.set_io_config()
-                logging.info("result1 set_io_config: ", result1, i)
-                logging.info("result2 set_io_config: ", result2, i)
+                logging.info(f"result1 set_io_config: {result1} {i}")
+                logging.info(f"result2 set_io_config: {result2} {i}")
                 self.get_io_config()
                 if result1 and result2:
                     break
@@ -99,10 +100,10 @@ class VecowIO:
             
         try:
             result = self.dll.Initial_POE(c_ubyte(1), c_ubyte(0))
-            logging.info("result initial_POE: ", result)
+            logging.info(f"result initial_POE: {result}")
 
             result = self.set_poe_config(0, 0b0000, 0b1111)
-            logging.info("result set_poe_config: ", result)
+            logging.info(f"result set_poe_config: {result}")
 
             self.initialized_poe = True
             return True
@@ -141,12 +142,12 @@ class VecowIO:
             
             result1 = self.other_dll.get_IO1_configuration(byref(DIOIso), byref(DIONPN), byref(DIONPNs), byref(DIOM))
             result2 = self.other_dll.get_IO2_configuration(byref(DIOIso), byref(DIONPN), byref(DIONPNs), byref(DIOM))
-            logging.info("result1 get_io_config: ", result1)
-            logging.info("result2 get_io_config: ", result2)
-            logging.info("DIOIso: ", DIOIso.value)
-            logging.info("DIONPN: ", DIONPN.value)
-            logging.info("DIONPNs: ", DIONPNs.value)
-            logging.info("DIOM: ", DIOM.value)
+            logging.info(f"result1 get_io_config: {result1}")
+            logging.info(f"result2 get_io_config: {result2}")
+            logging.info(f"DIOIso: {DIOIso.value}")
+            logging.info(f"DIONPN: {DIONPN.value}")
+            logging.info(f"DIONPNs: {DIONPNs.value}")
+            logging.info(f"DIOM: {DIOM.value}")
             return result1, result2
         except Exception as e:
             logging.info(f"Failed to configure DI: {e}")
@@ -163,9 +164,9 @@ class VecowIO:
 
             
             result = self.dll.GetPOEConfig(first_byte, byref(second_byte))
-            logging.info("result get_poe_config: ", result)
-            logging.info("first_byte: ", first_byte.value)
-            logging.info("second_byte: ", second_byte.value)
+            logging.info(f"result get_poe_config: {result}")
+            logging.info(f"first_byte: {first_byte.value}")
+            logging.info(f"second_byte: {second_byte.value}")
 
             return result, second_byte.value
         except Exception as e:
@@ -240,10 +241,8 @@ class VecowIO:
             # logging.info("result get_dio1: ", result, "di: ", di.value, "di2: ", di2.value)
             # result = self.other_dll.get_GPIO1(byref(gpio))
             # logging.info("result get_gpio1: ", result, "gpio: ", gpio.value)
-            
-            if result:
-                return di.value, di2.value
-            return None, None
+
+            return di.value, di2.value
         except Exception as e:
             logging.info(f"Failed to read DI: {e}")
             return None, None
@@ -262,10 +261,8 @@ class VecowIO:
             # logging.info("result get_dio1: ", result, "di: ", di.value, "di2: ", di2.value)
             # result = self.other_dll.get_GPIO1(byref(gpio))
             # logging.info("result get_gpio1: ", result, "gpio: ", gpio.value)
-            
-            if result:
-                return di.value, di2.value
-            return None, None
+
+            return di.value, di2.value
         except Exception as e:
             logging.info(f"Failed to read DI: {e}")
             return None, None
@@ -280,7 +277,7 @@ class VecowIO:
             # Convert input to byte and apply mask
             poe_value = c_ubyte(value & 0xFF)
             result = self.dll.SetPOE(c_ubyte(0), poe_value)
-            logging.info("result set POE: ", result)
+            logging.info(f"result set POE: {result}")
             return result
         except Exception as e:
             logging.info(f"Failed to set POE: {e}")
@@ -295,10 +292,10 @@ class VecowIO:
             poe_0 = c_ubyte()
             poe_1 = c_ubyte()
             result = self.dll.GetPOE(byref(poe_0), byref(poe_1))
-            logging.info("result get POE: ", result)
+            logging.info(f"result get POE: {result}")
             if result:
-                logging.info("poe_0.value: ", poe_0.value)
-                logging.info("poe_1.value: ", poe_1.value)
+                logging.info(f"poe_0.value: {poe_0.value}")
+                logging.info(f"poe_1.value: {poe_1.value}")
                 return poe_0.value
             return None
         except Exception as e:
@@ -321,11 +318,12 @@ class VecowIO:
                 current_value_bin[pin] = value
                 new_value = int("".join(map(str, current_value_bin[::-1])), 2) # Reverse back for int conversion
                 if bank == 1:
-                    self.set_do1(new_value)
+                    result = self.set_do1(new_value)
                 elif bank == 2:
-                    self.set_do2(new_value)
+                    result = self.set_do2(new_value)
                 else:
                     raise ValueError(f"bank must be either 1 or 2 got {bank}")
+            logging.info(f"Set DO bank{bank} pin{pin}={value} -> byte=0x{new_value:02X} result={result}")
             return True
         except Exception as e:
             logging.info(f"Failed to set DO independent: {e}")
@@ -349,11 +347,12 @@ class VecowIO:
                     current_value_bin[pin] = value
                 new_value = int("".join(map(str, current_value_bin[::-1])), 2) # Reverse back for int conversion
                 if bank == 1:
-                    self.set_do1(new_value)
+                    result = self.set_do1(new_value)
                 elif bank == 2:
-                    self.set_do2(new_value)
+                    result = self.set_do2(new_value)
                 else:
                     raise ValueError(f"bank must be 1 or 2 got {bank}")
+            logging.info(f"Set DO bank{bank} pins{pins}={value} -> byte=0x{new_value:02X} result={result}")
             return True
         except Exception as e:
             logging.info(f"Failed to set DO independent: {e}")

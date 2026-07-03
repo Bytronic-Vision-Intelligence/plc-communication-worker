@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<machine id="spc2xxx">
+  <iomode_control>
+  </iomode_control>
+  <iomode_type id="1">
+  	<type num="4" />
+  </iomode_type>
+  <ioport id="1">
+    <iopin id="0" group="7" bit="4" />
+    <iopin id="1" group="7" bit="5" />
+    <iopin id="2" group="7" bit="6" />
+    <iopin id="3" group="7" bit="7" />
+    <iopin id="4" group="7" bit="0" />
+    <iopin id="5" group="7" bit="1" />
+    <iopin id="6" group="7" bit="2" />
+    <iopin id="7" group="7" bit="3" />
+  </ioport>
+  <comport id="1">
+    <compin id="0" group="5" bit="6" />
+    <compin id="1" group="5" bit="7" />
+    <compin id="2" group="6" bit="0" />
+  </comport>
+  <comport id="2">
+    <compin id="0" group="8" bit="1" />
+    <compin id="1" group="8" bit="0" />
+    <compin id="2" group="5" bit="5" />
+  </comport>
+</machine>

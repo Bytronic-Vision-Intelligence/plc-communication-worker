@@ -4,5 +4,5 @@ complete_topic: magnapower/sortyboi/inference/complete
 position_topic: magnapower/sortyboi/inference/dio_array
 message: trigger_inference
 dio_count: 16
-dio_reset_delay: 0.5
+dio_reset_delay: 0.01
 dio_block_size: 8
