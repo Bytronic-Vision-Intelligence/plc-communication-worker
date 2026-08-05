@@ -1,0 +1,371 @@
+"""Vecow digital I/O controller (standalone).
+
+Loads vendor DLLs + IOConfig from:
+  1. ``VECOW_DLL_DIR`` env var
+  2. ``<standalone_dio>/vendor/vecow`` next to this package tree
+"""
+from __future__ import annotations
+
+import ctypes
+from ctypes import byref, c_ubyte, c_ushort
+import logging
+import os
+import shutil
+import subprocess
+import threading
+import time
+from pathlib import Path
+
+from filelock import FileLock
+
+logger = logging.getLogger(__name__)
+
+_REQUIRED_DLLS = ("drv.dll", "Vecow.dll", "drv_alim.dll", "Vecow_alim.dll")
+_STANDALONE_ROOT = Path(__file__).resolve().parent.parent
+
+
+def default_dll_dir() -> Path:
+    """Locate vendored Vecow DLLs (env override, then standalone_dio/vendor/vecow)."""
+    env = os.environ.get("VECOW_DLL_DIR")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    candidate = _STANDALONE_ROOT / "vendor" / "vecow"
+    if all((candidate / name).is_file() for name in _REQUIRED_DLLS):
+        return candidate.resolve()
+
+    # Incomplete/missing tree — return path so errors stay explicit.
+    return candidate.resolve()
+
+
+def _bios_version() -> str | None:
+    try:
+        out = subprocess.check_output(
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "(Get-CimInstance Win32_BIOS).SMBIOSBIOSVersion",
+            ],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        return out or None
+    except Exception:
+        return None
+
+
+def _ensure_ioconfig_xml(dll_dir: Path) -> None:
+    """Vecow loads ./IOConfig/<BIOS_name>.xml; alias a prefix match if needed."""
+    iocfg = dll_dir / "IOConfig"
+    if not iocfg.is_dir():
+        logger.error("Missing IOConfig folder at %s", iocfg)
+        return
+
+    bios = _bios_version()
+    if not bios:
+        logger.warning("Could not read BIOS version for IOConfig XML lookup")
+        return
+
+    target = iocfg / f"{bios}.xml"
+    if target.is_file():
+        logger.info("IOConfig XML present for BIOS %s", bios)
+        return
+
+    xmls = sorted(iocfg.glob("*.xml"))
+    match = None
+    for xml in sorted(xmls, key=lambda p: len(p.stem), reverse=True):
+        stem = xml.stem.strip()
+        if stem and bios.startswith(stem):
+            match = xml
+            break
+    if match is None:
+        logger.warning(
+            "No IOConfig XML prefix-match for BIOS %s (have %s)",
+            bios,
+            [p.stem for p in xmls[:10]],
+        )
+        return
+
+    shutil.copy2(match, target)
+    logger.info("Aliased %s -> %s for BIOS %s", match.name, target.name, bios)
+
+
+class VecowIO:
+    """Vecow DIO1 controller (flat pins 0..7)."""
+
+    def __init__(self, dll_dir=None):
+        self._lock = threading.Lock()
+        dll_dir = Path(dll_dir) if dll_dir else default_dll_dir()
+        self.dll_dir = dll_dir.resolve()
+        self.initialized_io = False
+        self.initialized_poe = False
+        self.drv_dll = None
+        self.other_drv_dll = None
+        self.dll = None
+        self.other_dll = None
+
+        if not self.dll_dir.is_dir():
+            logger.error("DLL dir not found: %s", self.dll_dir)
+            return
+        missing = [n for n in _REQUIRED_DLLS if not (self.dll_dir / n).is_file()]
+        if missing:
+            logger.error("Missing DLL(s) in %s: %s", self.dll_dir, ", ".join(missing))
+            return
+
+        # DLL resolves ./IOConfig/ from process CWD.
+        os.chdir(self.dll_dir)
+        _ensure_ioconfig_xml(self.dll_dir)
+        try:
+            self.drv_dll = ctypes.CDLL(str(self.dll_dir / "drv.dll"))
+            self.other_drv_dll = ctypes.CDLL(str(self.dll_dir / "drv_alim.dll"))
+            self.dll = ctypes.CDLL(str(self.dll_dir / "Vecow.dll"))
+            self.other_dll = ctypes.CDLL(str(self.dll_dir / "Vecow_alim.dll"))
+
+            with FileLock(str(self.dll_dir / "dio_lock.lock")):
+                self.initialize_io()
+                self.initialize_poe()
+        except Exception:
+            logger.exception("Failed to load Vecow DLLs from %s", self.dll_dir)
+            self.dll = None
+            self.drv_dll = None
+            self.other_dll = None
+            self.other_drv_dll = None
+            self.initialized_io = False
+            self.initialized_poe = False
+
+    def initialize_io(self):
+        if not self.other_dll:
+            return False
+        try:
+            self.other_dll.initial_SIO(c_ubyte(1), c_ubyte(0))
+            for i in range(10):
+                result = self.set_io_config()
+                if result:
+                    logger.info("set_io_config succeeded on attempt %s", i)
+                    break
+                time.sleep(0.1)
+            else:
+                logger.warning("set_io_config failed after 10 attempts")
+            self.initialized_io = True
+            self.set_do(0b00000000)
+            return True
+        except Exception:
+            logger.exception("initialize_io failed")
+            return False
+
+    def initialize_poe(self):
+        if not self.other_dll:
+            return False
+        try:
+            result = self.other_dll.initial_POE(c_ubyte(2), c_ubyte(0))
+            logger.info("initial_POE result=%s", result)
+            self.get_poe_config()
+            result = self.set_poe_config(0, 0b0000, 0b1111)
+            logger.info("set_poe_config result=%s", result)
+            self.get_poe_config()
+            self.initialized_poe = True
+            return True
+        except Exception:
+            logger.exception("initialize_poe failed")
+            return False
+
+    def set_io_config(self):
+        if not self.other_dll:
+            return False
+        try:
+            return self.other_dll.set_IO1_configuration(
+                c_ubyte(1),  # isolated
+                c_ubyte(0),  # NPN type
+                c_ubyte(1),  # NPN sink
+                c_ushort(0b1111111100000000),
+            )
+        except Exception:
+            logger.exception("set_io_config failed")
+            return False
+
+    def get_io_config(self):
+        if not self.other_dll:
+            return False
+        try:
+            dio_iso, dio_npn, dio_npns, dio_m = c_ubyte(), c_ubyte(), c_ubyte(), c_ushort()
+            result = self.other_dll.get_IO1_configuration(
+                byref(dio_iso), byref(dio_npn), byref(dio_npns), byref(dio_m)
+            )
+            logger.info(
+                "get_io_config result=%s DIOIso=%s DIONPN=%s DIONPNs=%s DIOM=%s",
+                result,
+                dio_iso.value,
+                dio_npn.value,
+                dio_npns.value,
+                dio_m.value,
+            )
+            return result
+        except Exception:
+            logger.exception("get_io_config failed")
+            return False
+
+    def get_poe_config(self):
+        if not self.other_dll:
+            return False
+        try:
+            first, second, third = c_ubyte(0), c_ubyte(), c_ubyte()
+            result = self.other_dll.get_POE_configuration(
+                first, byref(second), byref(third)
+            )
+            logger.info(
+                "get_poe_config result=%s first=%s second=%s third=%s",
+                result,
+                first.value,
+                second.value,
+                third.value,
+            )
+            return result
+        except Exception:
+            logger.exception("get_poe_config failed")
+            return False
+
+    def set_poe_config(self, first_byte=0, second_byte=0, third_byte=0):
+        if not self.other_dll:
+            return False
+        try:
+            return self.other_dll.set_POE_configuration(
+                c_ubyte(first_byte), c_ubyte(second_byte), c_ushort(third_byte)
+            )
+        except Exception:
+            logger.exception("set_poe_config failed")
+            return False
+
+    def set_do(self, value):
+        if not self.other_dll or not self.initialized_io:
+            return False
+        try:
+            return self.other_dll.set_DIO1(c_ubyte(value & 0xFF))
+        except Exception:
+            logger.exception("set_do failed value=%s", value)
+            return False
+
+    def get_di(self):
+        if not self.other_dll or not self.initialized_io:
+            return None, None
+        try:
+            di, di2 = c_ubyte(), c_ubyte()
+            result = self.other_dll.get_DIO1(byref(di), byref(di2))
+            if result:
+                return di.value, di2.value
+            return None, None
+        except Exception:
+            logger.exception("get_di failed")
+            return None, None
+
+    def set_poe(self, value):
+        if not self.other_dll or not self.initialized_poe:
+            return False
+        try:
+            return self.other_dll.set_POE(c_ubyte(0), c_ubyte(value & 0xFF))
+        except Exception:
+            logger.exception("set_poe failed value=%s", value)
+            return False
+
+    def get_poe(self):
+        if not self.other_dll or not self.initialized_poe:
+            return None
+        try:
+            poe_0, poe_1 = c_ubyte(0), c_ubyte()
+            result = self.other_dll.get_POE(poe_0, byref(poe_1))
+            if result:
+                return poe_1.value
+            return None
+        except Exception:
+            logger.exception("get_poe failed")
+            return None
+
+    def set_do_pin(self, pin, value):
+        """Set one DO pin (0..7)."""
+        if not self.dll or not self.initialized_io:
+            return False
+        try:
+            with self._lock:
+                current_value, _ = self.get_di()
+                if current_value is None:
+                    return False
+                bits = [int(b) for b in bin(current_value)[2:].zfill(8)][::-1]
+                bits[pin] = int(value)
+                return bool(self.set_do(int("".join(map(str, bits[::-1])), 2)))
+        except Exception:
+            logger.exception("set_do_pin failed pin=%s value=%s", pin, value)
+            return False
+
+    def set_do_pins(self, pins, value):
+        """Set multiple DO pins (0..7) to the same value."""
+        if not self.dll or not self.initialized_io:
+            return False
+        try:
+            with self._lock:
+                current_value, _ = self.get_di()
+                if current_value is None:
+                    return False
+                bits = [int(b) for b in bin(current_value)[2:].zfill(8)][::-1]
+                for pin in pins:
+                    bits[pin] = int(value)
+                return bool(self.set_do(int("".join(map(str, bits[::-1])), 2)))
+        except Exception:
+            logger.exception("set_do_pins failed pins=%s value=%s", pins, value)
+            return False
+
+    def get_di_pin(self, pin):
+        """Read one DI pin (0..7)."""
+        if not self.dll or not self.initialized_io:
+            return None
+        try:
+            _, current_value2 = self.get_di()
+            if current_value2 is None:
+                return None
+            bits = [int(b) for b in bin(current_value2)[2:].zfill(8)][::-1]
+            return bits[pin]
+        except Exception:
+            logger.exception("get_di_pin failed pin=%s", pin)
+            return None
+
+    def get_di_pins(self, pins):
+        """Read multiple DI pins (0..7)."""
+        if not self.dll or not self.initialized_io:
+            return None
+        try:
+            _, current_value2 = self.get_di()
+            if current_value2 is None:
+                return None
+            bits = [int(b) for b in bin(current_value2)[2:].zfill(8)][::-1]
+            return [bits[pin] for pin in pins]
+        except Exception:
+            logger.exception("get_di_pins failed pins=%s", pins)
+            return None
+
+    def get_do_pin(self, pin):
+        """Read mirrored DO pin state (0..7)."""
+        if not self.dll or not self.initialized_io:
+            return None
+        try:
+            current_value, _ = self.get_di()
+            if current_value is None:
+                return None
+            bits = [int(b) for b in bin(current_value)[2:].zfill(8)][::-1]
+            return bits[pin]
+        except Exception:
+            logger.exception("get_do_pin failed pin=%s", pin)
+            return None
+
+    def close(self):
+        """Release Vecow handles; force all DO pins low first."""
+        try:
+            if self.initialized_io and self.other_dll is not None:
+                self.set_do(0b00000000)
+                logger.info("Vecow DO cleared (all low) on close")
+        except Exception:
+            logger.exception("Failed clearing Vecow DO on close")
+        self.initialized_io = False
+        self.initialized_poe = False
+        self.drv_dll = None
+        self.other_drv_dll = None
+        self.dll = None
+        self.other_dll = None

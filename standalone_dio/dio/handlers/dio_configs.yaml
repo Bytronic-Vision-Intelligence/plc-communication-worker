@@ -1,0 +1,7 @@
+# Default pin mapping for the standalone service.
+# Override via config.yaml → dio.pin_mapping
+
+pin_mapping:
+  do:
+    fail: 0
+    pass: 3

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<machine id="vcm-1000">
+  <iomode_control>
+  </iomode_control>
+  <iomode_type id="1">
+  	<type num="99" />
+	<di_1 num="16" />
+	<do_1 num="16" />		
+  </iomode_type>
+  <ioport id="1">
+    <iopin id="0" group="7" bit="0" />
+    <iopin id="1" group="7" bit="1" />
+    <iopin id="2" group="7" bit="2" />
+    <iopin id="3" group="7" bit="3" />
+    <iopin id="4" group="7" bit="4" />
+    <iopin id="5" group="7" bit="5" />
+    <iopin id="6" group="7" bit="6" />
+    <iopin id="7" group="7" bit="7" />  
+    <iopin id="8" group="5" bit="6" />
+    <iopin id="9" group="5" bit="7" />
+    <iopin id="10" group="6" bit="0" />
+    <iopin id="11" group="6" bit="1" />
+    <iopin id="12" group="6" bit="3" />
+    <iopin id="13" group="6" bit="4" />
+    <iopin id="14" group="6" bit="5" />
+    <iopin id="15" group="6" bit="6" />	
+    <iopin id="16" group="8" bit="0" />
+    <iopin id="17" group="8" bit="1" />
+    <iopin id="18" group="8" bit="2" />
+    <iopin id="19" group="8" bit="3" />	
+    <iopin id="20" group="8" bit="4" />
+    <iopin id="21" group="8" bit="5" />
+    <iopin id="22" group="8" bit="6" />
+    <iopin id="23" group="8" bit="7" />
+    <iopin id="24" group="9" bit="0" />
+    <iopin id="25" group="9" bit="1" />
+    <iopin id="26" group="9" bit="2" />
+    <iopin id="27" group="9" bit="3" />
+    <iopin id="28" group="9" bit="4" />
+    <iopin id="29" group="9" bit="5" />
+    <iopin id="30" group="9" bit="6" />
+    <iopin id="31" group="9" bit="7" />			
+  </ioport>
+  <comport id="1">
+    <compin id="0" group="6" bit="7" />
+    <compin id="1" group="5" bit="5" />
+    <compin id="2" group="5" bit="3" />
+    <compin id="3" group="3" bit="3" />
+  </comport>
+  <comport id="2">
+    <compin id="0" group="2" bit="3" />
+    <compin id="1" group="3" bit="0" />
+    <compin id="2" group="1" bit="2" />
+    <compin id="3" group="5" bit="0" />
+  </comport>
+  <voltage id="1">
+    <volt id="0" r_big="1" r_small="0" r_lsb="11" />
+    <volt id="1" r_big="1" r_small="0" r_lsb="11"/>
+    <volt id="2" r_big="10" r_small="2" r_lsb="11"/>
+    <volt id="3" r_big="15" r_small="10" r_lsb="11"/>
+    <volt id="4" r_big="649" r_small="1000" r_lsb="11"/>	
+  </voltage>    
+</machine>

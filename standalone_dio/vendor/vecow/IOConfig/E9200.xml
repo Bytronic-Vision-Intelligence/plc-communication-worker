@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<machine id="ecs92xx">
+  <iomode_control id="1">
+    <controlpin id="0" group="4" bit="7" />
+    <controlpin id="1" group="6" bit="2" />
+  </iomode_control>
+  <iomode_control id="2">
+    <controlpin id="0" group="6" bit="0" />
+    <controlpin id="1" group="6" bit="1" />
+  </iomode_control>
+  <iomode_type id="1">
+  	<type num="8" />
+  </iomode_type>
+  <ioport id="1">
+    <iopin id="0" group="8" bit="0" />
+    <iopin id="1" group="8" bit="1" />
+    <iopin id="2" group="8" bit="2" />
+    <iopin id="3" group="8" bit="3" />
+    <iopin id="4" group="8" bit="4" />
+    <iopin id="5" group="8" bit="5" />
+    <iopin id="6" group="8" bit="6" />
+    <iopin id="7" group="8" bit="7" />
+    <iopin id="8" group="7" bit="0" />
+    <iopin id="9" group="7" bit="1" />
+    <iopin id="10" group="7" bit="2" />
+    <iopin id="11" group="7" bit="3" />
+    <iopin id="12" group="7" bit="4" />
+    <iopin id="13" group="7" bit="5" />
+    <iopin id="14" group="7" bit="6" />
+    <iopin id="15" group="7" bit="7" />
+  </ioport>
+  <ioport id="2">
+    <iopin id="0" group="3" bit="7" />
+    <iopin id="1" group="5" bit="6" />
+    <iopin id="2" group="5" bit="7" />
+    <iopin id="3" group="1" bit="5" />
+    <iopin id="4" group="1" bit="6" />
+    <iopin id="5" group="3" bit="5" />
+    <iopin id="6" group="4" bit="6" />
+    <iopin id="7" group="1" bit="1" />
+    <iopin id="8" group="2" bit="2" />
+    <iopin id="9" group="2" bit="6" />
+    <iopin id="10" group="6" bit="4" />
+    <iopin id="11" group="6" bit="5" />
+    <iopin id="12" group="4" bit="1" />
+    <iopin id="13" group="4" bit="0" />
+    <iopin id="14" group="5" bit="2" />
+    <iopin id="15" group="2" bit="7" />
+  </ioport>
+  <comport id="1">
+    <compin id="0" group="6" bit="7" />
+    <compin id="1" group="5" bit="5" />
+    <compin id="2" group="5" bit="3" />
+    <compin id="3" group="3" bit="3" />
+  </comport>
+  <comport id="2">
+    <compin id="0" group="2" bit="3" />
+    <compin id="1" group="3" bit="0" />
+    <compin id="2" group="1" bit="2" />
+    <compin id="3" group="5" bit="0" />
+  </comport>
+  <comport id="3">
+    <compin id="0" group="4" bit="4" />
+    <compin id="1" group="5" bit="4" />
+    <compin id="2" group="4" bit="3" />
+    <compin id="3" group="5" bit="1" />
+  </comport>
+  <comport id="4">
+    <compin id="0" group="4" bit="2" />
+    <compin id="1" group="3" bit="6" />
+    <compin id="2" group="1" bit="0" />
+    <compin id="3" group="3" bit="2" />
+  </comport>
+</machine>

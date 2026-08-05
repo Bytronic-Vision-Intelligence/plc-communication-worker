@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<machine id="AEPX_">
+  <iomode_control id="0">
+  </iomode_control>
+  <iomode_type id="1">
+  	<type num="8" />
+  </iomode_type>
+  <ioport id="1">
+    <iopin id="0" group="8" bit="0" />
+    <iopin id="1" group="8" bit="1" />
+    <iopin id="2" group="8" bit="2" />
+    <iopin id="3" group="8" bit="3" />
+    <iopin id="4" group="8" bit="4" />
+    <iopin id="5" group="8" bit="5" />
+    <iopin id="6" group="8" bit="6" />
+    <iopin id="7" group="8" bit="7" />
+    <iopin id="8" group="7" bit="0" />
+    <iopin id="9" group="7" bit="1" />
+    <iopin id="10" group="7" bit="2" />
+    <iopin id="11" group="7" bit="3" />
+    <iopin id="12" group="7" bit="4" />
+    <iopin id="13" group="7" bit="5" />
+    <iopin id="14" group="7" bit="6" />
+    <iopin id="15" group="7" bit="7" />
+  </ioport>
+  <comport id="0">
+  </comport>
+</machine>
