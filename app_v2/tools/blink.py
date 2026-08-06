@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from dio.dio_controller import VecowIO
+from Dependencies.dio_controller import VecowIO
 
 
 def main(argv: list[str] | None = None) -> int:

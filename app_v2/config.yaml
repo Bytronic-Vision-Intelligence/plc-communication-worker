@@ -1,0 +1,27 @@
+# app_v2 DIO pin bridge (MQTT ↔ Vecow pins).
+#
+#   python main.py
+#   python main.py emit 1 0 1 0 0 0 0 0
+
+mqtt:
+  broker: localhost
+  port: 1883
+  qos: 1
+  username: ""
+  password: ""
+  keepalive: 60
+
+dio:
+  topics:
+    di: dio/input
+    do: dio/output
+  # Bank numbers polled for DI / cleared on shutdown (1 and/or 2)
+  banks: [1]
+  default_bank: 1
+  # Pins per bank when splitting a multi-bank DO bit vector
+  block_size: 8
+  # DI pins per bank to poll (0..8)
+  di_count: 8
+  # How long to hold DO pins high before auto-reset
+  dio_reset_delay: 2.0
+  di_poll_hz: 20

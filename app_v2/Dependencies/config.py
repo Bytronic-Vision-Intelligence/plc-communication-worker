@@ -1,4 +1,4 @@
-"""YAML config loading for the standalone DIO package."""
+"""YAML config loading for the app_v2 DIO package."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ from typing import Any, Mapping
 
 import yaml
 
-STANDALONE_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_CONFIG = STANDALONE_ROOT / "config.yaml"
+APP_V2_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_CONFIG = APP_V2_ROOT / "config.yaml"
 
 
 def _to_ns(value: Any) -> Any:
@@ -29,11 +29,7 @@ def load_config(path: str | Path | None = None) -> SimpleNamespace:
         data = yaml.safe_load(fh) or {}
     if not isinstance(data, dict):
         raise ValueError(f"Config root must be a mapping: {cfg_path}")
-    ns = _to_ns(data)
-    # Keep raw plugins/handlers lists easy to read for the local loader.
-    if not hasattr(ns, "plugins"):
-        ns.plugins = {}
-    return ns
+    return _to_ns(data)
 
 
 def config_as_dict(cfg: Any) -> dict[str, Any]:
